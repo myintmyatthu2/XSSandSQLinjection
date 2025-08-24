@@ -1,3 +1,14 @@
+
+# Upgrade pip
+echo "Upgrading pip..."
+pip install --upgrade pip
+
+# Install requirements
+echo "Installing requirements..."
+pip install -r requirements.txt
+
+
+
 #!/usr/bin/env bash
 set -e
 python3 -m venv venv
