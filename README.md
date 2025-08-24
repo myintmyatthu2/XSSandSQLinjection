@@ -78,21 +78,21 @@ python app.py
 <LEAK_ALL> - Shows all credentials
 
 project_name/
-├── app.py                 # Main Flask application
-├── run.sh                # Automated setup script
-├── requirements.txt      # Python dependencies
-├── README.md            # This file
-├── .gitignore           # Git ignore rules
-└── templates/           # HTML templates
-    ├── base.html        # Base template
-    ├── login.html       # Login page
-    ├── feedback.html    # Feedback form
-    ├── admin_review.html # Admin review (vulnerable)
-    ├── admin_dashboard.html # Product management
-    ├── admin_orders.html # Order history
-    ├── shop.html        # User shop
-    ├── success.html     # Purchase confirmation
-    ├── attacker.html    # Leaked credentials view
+├── app.py # Main Flask application
+├── run.sh # Automated setup script
+├── requirements.txt # Python dependencies
+├── README.md # This file
+├── .gitignore # Git ignore rules
+└── templates/ # HTML templates
+├── base.html # Base template
+├── login.html # Login page
+├── feedback.html # Feedback form
+├── admin_review.html # Admin review (vulnerable)
+├── admin_dashboard.html # Product management
+├── admin_orders.html # Order history
+├── shop.html # User shop
+├── success.html # Purchase confirmation
+└── attacker.html # Leaked credentials view
     
 ## login as admin and go to admin_review you can try
 type this in searchbar 
