@@ -46,3 +46,55 @@ A intentionally vulnerable Flask web application designed for educational purpos
    ```bash
    git clone https://github.com/myintmyatthu2/XSSandSQLinjection.git
    cd aod_security_lab
+
+2. **Run the automated setup**
+
+bash
+chmod +x run.sh
+./run.sh
+
+### Or manually:
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+
+3. **Open http://localhost:5000 in your browser**
+4. **Default Credentials**
+   Role      :admin,user,user
+   Username  :admin,alice,bob
+   Password  :admin123,alice123,bob123
+   Access    :Fullaccess,shop access, shop access
+
+5. **Special Markers: Use built-in shortcuts:**
+
+<XSS_DEMO> - Auto-generates XSS payload
+
+<LEAK_ADMIN> - Shows admin credentials
+
+<LEAK_USERS> - Shows user credentials
+
+<LEAK_ALL> - Shows all credentials
+
+project_name/
+├── app.py                 # Main Flask application
+├── run.sh                # Automated setup script
+├── requirements.txt      # Python dependencies
+├── README.md            # This file
+├── .gitignore           # Git ignore rules
+└── templates/           # HTML templates
+    ├── base.html        # Base template
+    ├── login.html       # Login page
+    ├── feedback.html    # Feedback form
+    ├── admin_review.html # Admin review (vulnerable)
+    ├── admin_dashboard.html # Product management
+    ├── admin_orders.html # Order history
+    ├── shop.html        # User shop
+    ├── success.html     # Purchase confirmation
+    ├── attacker.html    # Leaked credentials view
+    
+## login as admin and go to admin_review you can try
+type this in searchbar 
+1.  ' OR 1=1; --
+2.  'UNION SELECT username, password, NULL , NULL from users --
