@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<h2>Shop</h2><p>To demonstrate tampering, edit the hidden price field before submitting.</p>
+<table><tr><th>ID</th><th>Name</th><th>Price</th><th>Buy</th></tr>
+{% for id, name, price in products %}<tr><td>{{ id }}</td><td>{{ name }}</td><td>${{ price }}</td>
+<td><form method='POST' action='{{ url_for('buy') }}'><input type='hidden' name='product_id' value='{{ id }}'><input type='hidden' name='price' value='{{ price }}'><button type='submit'>Buy</button></form></td></tr>{% endfor %}
+</table>{% endblock %}

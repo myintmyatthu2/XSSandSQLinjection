@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Order History - Admin</title>
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        header a { margin-right: 15px; text-decoration: none; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .tampered { background-color: #ffcccc; color: #d32f2f; font-weight: bold; }
+        .stats { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .instructions { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        code { background-color: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Web Security Education Lab</h1>
+    <nav>
+    {% if session.username %}
+        <strong>Logged in:</strong> {{ session.username }} ({{ session.role }}) |
+        <a href='/feedback'>Feedback</a>
+        {% if session.role == 'admin' %}
+            <a href='/admin/review'>Admin Review</a>
+            <a href='/admin/dashboard'>Admin Dashboard</a>
+            <a href='/admin/orders'>Order History</a>
+        {% else %}
+            <a href='/shop'>Shop</a>
+        {% endif %}
+        <a href='/attacker'>Attacker View</a> | 
+        <a href='/logout'>Logout</a>
+    {% else %}
+        <a href='/login'>Login</a> | 
+        <a href='/feedback'>Feedback</a>
+    {% endif %}
+    </nav>
+</header>
+<hr>
+
+<h2>Order History (Admin View)</h2>
+<p>View all purchases and detect price tampering attempts.</p>
+
+{% if orders %}
+<!-- Statistics -->
+<div class="stats">
+    <h3>💰 Financial Impact Analysis</h3>
+    <p><strong>Total Orders:</strong> {{ total_orders }}</p>
+    <p><strong>Tampered Orders:</strong> {{ tampered_orders }} 
+        ({{ "%.1f"|format((tampered_orders / total_orders * 100) if total_orders > 0 else 0) }}%)</p>
+    <p><strong>Total Revenue Loss:</strong> ${{ total_loss }}</p>
+</div>
+
+<!-- Orders Table -->
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Product</th>
+        <th>Actual Price</th>
+        <th>Price Paid</th>
+        <th>Difference</th>
+        <th>Time</th>
+    </tr>
+    {% for order in orders %}
+    {% set order_id, username, product_name, actual_price, price_paid, timestamp = order %}
+    <tr {% if price_paid != actual_price %}class="tampered"{% endif %}>
+        <td>{{ order_id }}</td>
+        <td>{{ username }}</td>
+        <td>{{ product_name }}</td>
+        <td>${{ actual_price }}</td>
+        <td>${{ price_paid }}</td>
+        <td>
+            {% if price_paid != actual_price %}
+                -${{ actual_price - price_paid }} (TAMPERED!)
+            {% else %}
+                $0
+            {% endif %}
+        </td>
+        <td>{{ timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+    <p style="text-align: center; padding: 20px; color: #6c757d;">No orders found. Make some purchases first!</p>
+{% endif %}
+
+<!-- Testing Instructions -->
+<div class="instructions">
+    <h3>🔧 How to Test Price Tampering:</h3>
+    <ol>
+        <li>Login as a regular user (alice/alice123 or bob/bob123)</li>
+        <li>Go to the Shop page</li>
+        <li>Right-click a "Buy" button and select "Inspect"</li>
+        <li>Find the hidden price field: <code>&lt;input type="hidden" name="price" value="1000"&gt;</code></li>
+        <li>Change the value to something lower: <code>value="1"</code></li>
+        <li>Click "Buy" to complete the purchase at the manipulated price</li>
+        <li>Return here to see the tampered order highlighted in red</li>
+    </ol>
+</div>
+
+<hr>
+<footer>
+    <p><small>Educational Purpose Only - This application contains intentional vulnerabilities for learning about web security.</small></p>
+</footer>
+</body>
+</html>

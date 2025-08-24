@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Admin Review (Vulnerable to XSS and SQL Injection)</h2>
+<p>This page is intentionally vulnerable to demonstrate security issues.</p>
+
+<!-- Search form -->
+<form method="GET" action="{{ url_for('admin_review') }}" style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 5px;">
+    <h3>Search Feedback Messages</h3>
+    <input type="text" name="search" value="{{ search if search else '' }}" placeholder="Enter search term..." style="padding: 8px; width: 300px;">
+    <button type="submit" style="padding: 8px 15px;">Search</button>
+    
+    {% if search %}
+        <a href="{{ url_for('admin_review') }}" style="margin-left: 15px;">Clear Search</a>
+    {% endif %}
+</form>
+
+<!-- SQL Injection Tips -->
+<div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ffeaa7;">
+    <h4>💡 SQL Injection Testing Tips:</h4>
+    <p>Try these payloads in the search box:</p>
+    <ul style="font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 3px;">
+        <li><strong>' OR 1=1 --</strong> - Show all records (bypass filter)</li>
+        <li><strong>' UNION SELECT username,password,NULL FROM users --</strong> - Extract user credentials</li>
+        <li><strong>'; DROP TABLE feedback; --</strong> - Try to delete table (may be blocked)</li>
+        <li><strong>' OR (SELECT COUNT(*) FROM users WHERE username='admin')>0 --</strong> - Boolean-based blind SQLi</li>
+    </ul>
+</div>
+
+<!-- Results table -->
+<table style="width: 100%; border-collapse: collapse;">
+    <tr style="background-color: #f8f9fa;">
+        <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">ID</th>
+        <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Name</th>
+        <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">When</th>
+        <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Message (raw - vulnerable to XSS)</th>
+    </tr>
+    {% for id, name, message, ts in rows %}
+    <tr>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ id }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ name }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ ts }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ message | safe }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if not rows %}
+    <p style="text-align: center; padding: 20px; color: #6c757d;">No feedback messages found.</p>
+{% endif %}
+
+<!-- Debug info -->
+<div style="margin-top: 30px; padding: 15px; background: #e9ecef; border-radius: 5px; font-size: 14px;">
+    <h4>🔧 Debug Information:</h4>
+    <p><strong>Current Search:</strong> <code>{{ search if search else 'None' }}</code></p>
+    <p><strong>SQL Injection Protection:</strong> {{ 'ENABLED' if protection_sqli else 'DISABLED' }}</p>
+    <p><strong>XSS Protection:</strong> {{ 'ENABLED' if protection_xss else 'DISABLED' }}</p>
+    <p><strong>Results Found:</strong> {{ rows|length }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block content %}
+<h2>Attacker Inbox</h2>
+<table><tr><th>ID</th><th>When</th><th>Data</th></tr>
+{% for id, data, ts in rows %}<tr><td>{{ id }}</td><td>{{ ts }}</td><td>{{ data }}</td></tr>{% endfor %}</table>
+{% endblock %}

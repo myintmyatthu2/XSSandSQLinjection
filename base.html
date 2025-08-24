@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'><title>{{ title or 'AOD Full Project' }}</title>
+<style>body{font-family:system-ui, Arial, sans-serif;margin:20px;}header a{margin-right:10px}table{border-collapse:collapse}th,td{border:1px solid #ddd;padding:6px}</style>
+</head><body>
+<header>
+{% if session.username %}
+  <strong>Logged in:</strong> {{ session.username }} ({{ session.role }}) |
+  <a href='{{ url_for('feedback') }}'>Feedback</a>
+  {% if session.role=='admin' %}<a href='{{ url_for('admin_review') }}'>Admin Review</a><a href='{{ url_for('admin_dashboard') }}'>Admin Dashboard</a>{% else %}<a href='{{ url_for('shop') }}'>Shop</a>{% endif %}
+  <a href='{{ url_for('attacker') }}'>Attacker</a> | <a href='{{ url_for('logout') }}'>Logout</a>
+  <a href='{{ url_for('admin_orders') }}'>Order History</a> 
+{% else %}
+  <a href='{{ url_for('login') }}'>Login</a> | <a href='{{ url_for('feedback') }}'>Feedback</a>
+   
+{% endif %}
+</header><hr>
+{% block content %}{% endblock %}
+</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<

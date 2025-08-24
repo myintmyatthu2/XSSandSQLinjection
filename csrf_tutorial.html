@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>CSRF Tutorial - AOD Security Lab</title>
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        header a { margin-right: 15px; text-decoration: none; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .alert { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .security-status { padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        .security-enabled { background-color: #d4edda; color: #155724; padding: 5px; border-radius: 3px; }
+        .security-disabled { background-color: #f8d7da; color: #721c24; padding: 5px; border-radius: 3px; }
+        .code { font-family: monospace; background-color: #f4f4f4; padding: 5px; border-radius: 3px; }
+        .vulnerable { background-color: #fff3cd; color: #856404; padding: 5px; border: 1px solid #ffeeba; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Web Security Education Lab</h1>
+    <nav>
+    {% if session.username %}
+        <strong>Logged in:</strong> {{ session.username }} ({{ session.role }}) |
+        <a href='/security'>Security Dashboard</a>
+        <a href='/feedback'>Feedback</a>
+        {% if session.role == 'admin' %}
+            <a href='/admin/review'>Admin Review</a>
+            <a href='/admin/dashboard'>Admin Dashboard</a>
+        {% else %}
+            <a href='/shop'>Shop</a>
+            <a href='/profile'>Profile</a>
+        {% endif %}
+        <a href='/attacker'>Attacker View</a> | 
+        <a href='/logout'>Logout</a>
+    {% else %}
+        <a href='/login'>Login</a> | 
+        <a href='/feedback'>Feedback</a> |
+        <a href='/security'>Security Overview</a>
+    {% endif %}
+    </nav>
+</header>
+<hr>
+
+<h2>CSRF (Cross-Site Request Forgery) Tutorial</h2>
+
+<div class="vulnerable">
+    <p><strong>Warning:</strong> This application contains intentional CSRF vulnerabilities for educational purposes.</p>
+</div>
+
+<h3>What is CSRF?</h3>
+<p>Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they're currently authenticated.</p>
+
+<h3>How CSRF Works</h3>
+<p>Attackers trick users into submitting requests to a website where they are authenticated, causing unintended actions.</p>
+
+<h3>Try It Out</h3>
+<p>First, disable CSRF protection in the <a href='/security'>Security Dashboard</a>.</p>
+<p>Then create an HTML file with this content:</p>
+<pre class="code">
+&lt;form action="http://localhost:5000/buy" method="POST"&gt;
+  &lt;input type="hidden" name="product_id" value="1"&gt;
+  &lt;input type="hidden" name="price" value="1"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit();&lt;/script&gt;
+</pre>
+<p>Open this file while logged into the application to see the CSRF attack in action.</p>
+
+<h3>Prevention</h3>
+<ul>
+    <li>Use CSRF tokens</li>
+    <li>Check Origin and Referer headers</li>
+    <li>Use SameSite cookie attribute</li>
+    <li>Require re-authentication for sensitive actions</li>
+</ul>
+
+<p>Toggle CSRF protection to see how it prevents these attacks.</p>
+
+<hr>
+<footer>
+    <p><small>Educational Purpose Only - This application contains intentional vulnerabilities for learning about web security.</small></p>
+</footer>
+</body>
+</html>

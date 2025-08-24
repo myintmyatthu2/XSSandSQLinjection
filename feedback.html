@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% block content %}
+<h2>Feedback</h2>
+<form method='POST' style='margin-bottom:1rem;'>
+  <label>Name:</label><br><input name='name' style='width:420px;' placeholder='Your name' /><br><br>
+  <label>Message:</label><br><textarea name='message' rows='4' cols='60' placeholder='Write feedback or marker'></textarea><br><br>
+  <button type='submit'>Submit</button>
+</form>
+{% if leaked %}
+  <h3>Leaked Info (simulated)</h3>
+  <pre>{{ leaked }}</pre>
+{% endif %}
+<h3>Recent Feedback</h3>
+{% if rows %}
+<table><thead><tr><th>Name</th><th>When</th><th>Message</th></tr></thead><tbody>
+{% for name, message, ts in rows %}
+<tr><td>{{ name }}</td><td>{{ ts }}</td><td>{{ message }}</td></tr>
+{% endfor %}
+</tbody></table>
+{% else %}<p>No feedback yet.</p>{% endif %}
+{% endblock %}
